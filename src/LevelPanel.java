@@ -1,18 +1,25 @@
 import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 /** Displays the imported image used as the testing level. */
 public class LevelPanel extends JPanel {
-    private Image levelImage;
+    private BufferedImage levelImage;
     private final KeyHandler keyHandler;
     private final Player player = new Player();
+    public Set<Color> colorsRight = new HashSet<>();
+    public Set<Color> colorsLeft = new HashSet<>();
+    public Set<Color> colorsTop = new HashSet<>();
+    public Set<Color> colorsBottom = new HashSet<>();
 
     public LevelPanel(KeyHandler keyHandler, String level, int x, int y) {
         setFocusable(true);
@@ -23,13 +30,9 @@ public class LevelPanel extends JPanel {
 
         // Update movement and repaint roughly 60 times per second.
         new Timer(16, event -> {
-            player.update(keyHandler);
-            repaint();
-        }).start();
-
-        // Update movement and repaint roughly 60 times per second.
-        new Timer(16, event -> {
-            player.update(keyHandler);
+            // Read the colors at the player's current position before moving.
+            getPlayerContactedColors();
+            player.update(keyHandler, colorsRight, colorsLeft, colorsTop, colorsBottom);
             repaint();
         }).start();
     }
@@ -44,7 +47,7 @@ public class LevelPanel extends JPanel {
                 resource.close();
                 return;
             }
-            
+
             levelImage = ImageIO.read(new File("src/assets/testing-level.png"));
         } catch (IOException exception) {
             throw new IllegalStateException(
@@ -61,5 +64,47 @@ public class LevelPanel extends JPanel {
             g.drawImage(levelImage, 0, 0, getWidth(), getHeight(), this);
             player.draw(g, getWidth(), getHeight());
         }
+    }
+
+    public Set<Color> getPlayerContactedColors() {
+        Set<Color> playerContacted = new HashSet<>();
+        // Use the same scaled dimensions used when drawing the player.
+        int playerWidth = Math.max(1, player.width * getWidth() / 400);
+        int playerHeight = Math.max(1, player.height * getHeight() / 300);
+        colorsBottom.clear();
+        colorsLeft.clear();
+        colorsRight.clear();
+        colorsTop.clear();
+
+        // Check every pixel on the top and bottom edges.
+        for (int x = player.x + 10; x < player.x + playerWidth - 10; x++) {
+            addColorAtScreenPosition(colorsTop, x, player.y);
+            addColorAtScreenPosition(colorsBottom, x, player.y + playerHeight - 1);
+        }
+
+
+        // Check every pixel on the left and right edges.
+        for (int y = player.y + 10; y < player.y + playerHeight - 10; y++) {
+            addColorAtScreenPosition(colorsLeft, player.x, y);
+            addColorAtScreenPosition(colorsRight, player.x + playerWidth - 1, y);
+        }
+
+        playerContacted.addAll(colorsBottom);
+        playerContacted.addAll(colorsRight);
+        playerContacted.addAll(colorsTop);
+        playerContacted.addAll(colorsLeft);
+
+        return playerContacted;
+    }
+
+    private void addColorAtScreenPosition(Set<Color> colors, int screenX, int screenY) {
+        if (screenX < 0 || screenX >= getWidth()
+                || screenY < 0 || screenY >= getHeight()) {
+            return;
+        }
+
+        int imageX = screenX * levelImage.getWidth() / getWidth();
+        int imageY = screenY * levelImage.getHeight() / getHeight();
+        colors.add(new Color(levelImage.getRGB(imageX, imageY), true));
     }
 }

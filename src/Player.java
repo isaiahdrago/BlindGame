@@ -1,14 +1,16 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Player {
     
     private int health;
     private int hunger;
     private int speed;
-    private int x;
-    private int y;
+    public int x;
+    public int y;
     public int width;
     public int height;
 
@@ -27,18 +29,30 @@ public class Player {
         this.y = y;
     }
 
-    public void update(KeyHandler keyHandler) {
+    public void update(KeyHandler keyHandler, 
+        Set<Color> colorsRight,
+        Set<Color> colorsLeft,
+        Set<Color> colorsTop,
+        Set<Color> colorsBottom) {
         if (keyHandler.isKeyPressed(KeyEvent.VK_LEFT)) {
-            x -= speed;
+            if (!colorsLeft.contains(new Color(127, 127, 127))) {
+               x -= speed; 
+            }
         }
         if (keyHandler.isKeyPressed(KeyEvent.VK_RIGHT)) {
-            x += speed;
+            if (!colorsRight.contains(new Color(127, 127, 127))) {
+               x += speed; 
+            }
         }
         if (keyHandler.isKeyPressed(KeyEvent.VK_UP)) {
-            y -= speed;
+            if (!colorsTop.contains(new Color(127, 127, 127))) {
+               y -= speed; 
+            }
         }
         if (keyHandler.isKeyPressed(KeyEvent.VK_DOWN)) {
-            y += speed;
+            if (!colorsBottom.contains(new Color(127, 127, 127))) {
+               y += speed; 
+            }
         }
     }
 
@@ -46,6 +60,4 @@ public class Player {
         g.setColor(Color.MAGENTA);
         g.fillRect(x, y, this.width * width / 400, this.height * height / 300);
     }
-
-    public Set<Color>
 }
