@@ -29,10 +29,10 @@ public class LevelPanel extends JPanel {
         this.keyHandler = keyHandler;
 
         // Update movement and repaint roughly 60 times per second.
-        new Timer(16, event -> {
+        new Timer(32, event -> {
             // Read the colors at the player's current position before moving.
-            getPlayerContactedColors();
-            player.update(keyHandler, colorsRight, colorsLeft, colorsTop, colorsBottom);
+            Set<Color> contacted = getPlayerContactedColors();
+            player.update(keyHandler, contacted, colorsRight, colorsLeft, colorsTop, colorsBottom);
             repaint();
         }).start();
     }
