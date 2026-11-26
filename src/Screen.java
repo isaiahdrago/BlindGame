@@ -12,7 +12,7 @@ public class Screen extends JFrame {
     private final KeyHandler keyHandler = new KeyHandler();
     private final LevelPanel levelPanel;
 
-    public Screen() {
+    public Screen(String level) {
         // Create the initial screen for the game
         setTitle("Initial Screen");
 
@@ -22,7 +22,7 @@ public class Screen extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        levelPanel = new LevelPanel(keyHandler, "/assets/testing-level.png", 500, 500);
+        levelPanel = new LevelPanel(keyHandler, "/assets/levels/" + level, 100, 100);
         add(levelPanel, BorderLayout.CENTER);
 
         // Ensure the frame receives keyboard input after opening

@@ -6,7 +6,7 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         SwingUtilities.invokeLater(() -> {
-            frame = new Screen();
+            frame = new Screen("testing-level.png");
             frame.setVisible(true);
         });
     }

@@ -68,7 +68,9 @@ public class LevelPanel extends JPanel {
 
     public Set<Color> getPlayerContactedColors() {
         Set<Color> playerContacted = new HashSet<>();
-        // Use the same scaled dimensions used when drawing the player.
+        // Player coordinates are logical coordinates in a 400 x 300 level.
+        int playerX = player.x * getWidth() / 400;
+        int playerY = player.y * getHeight() / 300;
         int playerWidth = Math.max(1, player.width * getWidth() / 400);
         int playerHeight = Math.max(1, player.height * getHeight() / 300);
         colorsBottom.clear();
@@ -77,16 +79,16 @@ public class LevelPanel extends JPanel {
         colorsTop.clear();
 
         // Check every pixel on the top and bottom edges.
-        for (int x = player.x + 10; x < player.x + playerWidth - 10; x++) {
-            addColorAtScreenPosition(colorsTop, x, player.y);
-            addColorAtScreenPosition(colorsBottom, x, player.y + playerHeight - 1);
+        for (int x = playerX + 10; x < playerX + playerWidth - 10; x++) {
+            addColorAtScreenPosition(colorsTop, x, playerY);
+            addColorAtScreenPosition(colorsBottom, x, playerY + playerHeight - 1);
         }
 
 
         // Check every pixel on the left and right edges.
-        for (int y = player.y + 10; y < player.y + playerHeight - 10; y++) {
-            addColorAtScreenPosition(colorsLeft, player.x, y);
-            addColorAtScreenPosition(colorsRight, player.x + playerWidth - 1, y);
+        for (int y = playerY + 10; y < playerY + playerHeight - 10; y++) {
+            addColorAtScreenPosition(colorsLeft, playerX, y);
+            addColorAtScreenPosition(colorsRight, playerX + playerWidth - 1, y);
         }
 
         playerContacted.addAll(colorsBottom);
