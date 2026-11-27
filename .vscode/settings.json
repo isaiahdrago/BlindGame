@@ -2,6 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "lib/**/*.jar"
+        "lib/Jamepad-1.4.0.jar",
+        "lib/sdl2gdx-1.0.4.jar"
     ]
 }

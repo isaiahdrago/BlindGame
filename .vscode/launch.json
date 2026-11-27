@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Game",
+            "request": "launch",
+            "mainClass": "App",
+            "classPaths": [
+                "${workspaceFolder}/bin",
+                "${workspaceFolder}/lib/Jamepad-1.4.0.jar",
+                "${workspaceFolder}/lib/sdl2gdx-1.0.4.jar"
+            ]
+        }
+    ]
+}

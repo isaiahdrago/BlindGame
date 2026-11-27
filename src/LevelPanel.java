@@ -3,8 +3,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 import javax.imageio.ImageIO;
@@ -14,7 +12,6 @@ import javax.swing.Timer;
 /** Displays the imported image used as the testing level. */
 public class LevelPanel extends JPanel {
     private BufferedImage levelImage;
-    private final KeyHandler keyHandler;
     private final Player player = new Player();
     public Set<Color> colorsRight = new HashSet<>();
     public Set<Color> colorsLeft = new HashSet<>();
@@ -25,8 +22,8 @@ public class LevelPanel extends JPanel {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         addKeyListener(keyHandler);
+
         loadLevelImage(level, x, y);
-        this.keyHandler = keyHandler;
 
         // Update movement and repaint roughly 60 times per second.
         new Timer(32, event -> {
@@ -48,7 +45,7 @@ public class LevelPanel extends JPanel {
                 return;
             }
 
-            levelImage = ImageIO.read(new File("src/assets/testing-level.png"));
+            levelImage = ImageIO.read(new File("src/assets/testing/testing-level.png"));
         } catch (IOException exception) {
             throw new IllegalStateException(
                     "Could not load " + level, exception);
